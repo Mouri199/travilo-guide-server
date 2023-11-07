@@ -1,10 +1,10 @@
-const express =require ('express')
+const express = require('express')
 const app = express()
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
-const port = process.env.PORT  || 8000;
+const port = process.env.PORT || 8000;
 
 app.use(cors())
 app.use(express.json())
@@ -28,14 +28,62 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const serv = client.db('traviloDB').collection('services')
+    const allserv = client.db('traviloDB').collection('allservices')
+    const addBook = client.db('traviloDB').collection('booking')
 
-    app.get('/services',async (req, res) => {
-        const cursor = serv.find()
-        const result = await cursor.toArray()
-        res.send(result)
-      })
+    app.get('/services', async (req, res) => {
+      const cursor = serv.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+    app.get('/mybooking', async (req, res) => {
+      const cursor = addBook.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
 
- 
+    app.get('/Details/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await allserv.findOne(query)
+      res.send(result);
+    })
+
+    app.get('/allservices/:id', async (req, res) => {
+
+      const id = req.params.id;
+      // console.log(name);
+      const query = { _id: new ObjectId(id) }
+      const result = await allserv.find(query).toArray()
+      res.send(result);
+    })
+
+
+    app.get('/allservices', async (req, res) => {
+      const cursor = allserv.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    app.post('/allservices', async(req,res) =>{
+      const addService = req.body;
+      console.log(addService);
+      const result = await allserv.insertOne(addService)
+      res.send(result)
+    })
+
+    app.post('/booking', async (req, res) => {
+      const addBooking = req.body;
+      console.log(addBooking);
+      const result = await addBook.insertOne(addBooking)
+      res.send(result)
+    }) 
+
+
+
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -47,10 +95,10 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/' ,(req,res) =>{
-    res.send('Hello From Travilo')
+app.get('/', (req, res) => {
+  res.send('Hello From Travilo')
 })
 
-app.listen(port,() =>{
-    console.log(`Travilo Guide is running ${port}`);
+app.listen(port, () => {
+  console.log(`Travilo Guide is running ${port}`);
 })
