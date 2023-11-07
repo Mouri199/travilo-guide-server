@@ -39,7 +39,7 @@ async function run() {
     app.get('/mybooking', async (req, res) => {
       const cursor = addBook.find()
       const result = await cursor.toArray()
-      res.send(result)
+      res.send(result) 
     })
 
     app.get('/Details/:id', async (req, res) => {
