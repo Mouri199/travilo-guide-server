@@ -63,7 +63,7 @@ async function run() {
       const cursor = allserv.find()
       const result = await cursor.toArray()
       res.send(result)
-    })
+    }) 
 
     app.post('/allservices', async(req,res) =>{
       const addService = req.body;
