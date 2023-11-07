@@ -71,7 +71,7 @@ async function run() {
       const result = await allserv.insertOne(addService)
       res.send(result)
     })
-
+ 
     app.post('/booking', async (req, res) => {
       const addBooking = req.body;
       console.log(addBooking);
