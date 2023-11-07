@@ -57,7 +57,7 @@ async function run() {
       const result = await allserv.find(query).toArray()
       res.send(result);
     })
-
+ 
 
     app.get('/allservices', async (req, res) => {
       const cursor = allserv.find()
