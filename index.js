@@ -47,7 +47,7 @@ async function run() {
       const query = { _id: new ObjectId(id) }
       const result = await allserv.findOne(query)
       res.send(result);
-    })
+    }) 
 
     app.get('/allservices/:id', async (req, res) => {
 
