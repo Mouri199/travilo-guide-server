@@ -39,7 +39,7 @@ async function run() {
     app.get('/mybooking', async (req, res) => {
       const cursor = addBook.find()
       const result = await cursor.toArray()
-      res.send(result) 
+      res.send(result)
     })
 
     app.get('/Details/:id', async (req, res) => {
@@ -47,7 +47,26 @@ async function run() {
       const query = { _id: new ObjectId(id) }
       const result = await allserv.findOne(query)
       res.send(result);
-    }) 
+    })
+
+    app.patch("/Details/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateRequest = req.body;
+      console.log(updateRequest);
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true }
+      const updatedService = {
+        $set: {
+          name: updateRequest.name,
+          price: updateRequest.price,
+       
+          
+        }
+      }
+      const result = await addBook.updateOne(filter, updatedService, options);
+      res.send(result);
+
+    })
 
     app.get('/allservices/:id', async (req, res) => {
 
@@ -57,31 +76,54 @@ async function run() {
       const result = await allserv.find(query).toArray()
       res.send(result);
     })
- 
+
 
     app.get('/allservices', async (req, res) => {
       const cursor = allserv.find()
       const result = await cursor.toArray()
       res.send(result)
-    }) 
+    })
 
-    app.post('/allservices', async(req,res) =>{
+    // my services
+    app.get("/myservices", async (req, res) => {
+      // const email = req.query.email;
+      let query = {};
+      if (req.query?.email) {
+        query = {
+          email: req.query.email,
+        }
+      }
+      const result = await allserv.find(query).toArray();
+      res.send(result);
+      // console.log(email);
+      // res.send(email);
+    })
+
+    app.delete("/myservices/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await allserv.deleteOne(query);
+      res.send(result);
+    })
+
+
+    app.post('/allservices', async (req, res) => {
       const addService = req.body;
       console.log(addService);
       const result = await allserv.insertOne(addService)
       res.send(result)
     })
- 
+
     app.post('/booking', async (req, res) => {
       const addBooking = req.body;
       console.log(addBooking);
       const result = await addBook.insertOne(addBooking)
       res.send(result)
-    }) 
+    })
 
 
 
- 
+
 
 
     // Send a ping to confirm a successful connection
