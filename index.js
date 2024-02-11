@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const serv = client.db('traviloDB').collection('services')
     const allserv = client.db('traviloDB').collection('allservices')
     const addBook = client.db('traviloDB').collection('booking')
@@ -59,11 +59,13 @@ async function run() {
         $set: {
           name: updateRequest.name,
           price: updateRequest.price,
-       
-          
+          detail: updateRequest.detail,
+          image: updateRequest.photo
+
+
         }
       }
-      const result = await addBook.updateOne(filter, updatedService, options);
+      const result = await allserv.updateOne(filter, updatedService, options);
       res.send(result);
 
     })
@@ -76,7 +78,7 @@ async function run() {
       const result = await allserv.find(query).toArray()
       res.send(result);
     })
-
+ 
 
     app.get('/allservices', async (req, res) => {
       const cursor = allserv.find()
