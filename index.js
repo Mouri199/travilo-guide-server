@@ -71,9 +71,8 @@ async function run() {
     })
 
     app.get('/allservices/:id', async (req, res) => {
-
       const id = req.params.id;
-      // console.log(name);
+      console.log(name);
       const query = { _id: new ObjectId(id) }
       const result = await allserv.find(query).toArray()
       res.send(result);
