@@ -77,7 +77,7 @@ async function run() {
       const result = await allserv.find(query).toArray()
       res.send(result);
     })
- 
+
 
     app.get('/allservices', async (req, res) => {
       const cursor = allserv.find()
@@ -123,7 +123,18 @@ async function run() {
     })
 
 
+    app.get('/service', async (req, res) => {
 
+      const nameQuery = req.query.name;
+      const query = {
+        name: {
+          $regex: new RegExp(nameQuery, "i"),
+        },
+      };
+      const cursor = allserv.find(query)
+      const result = await cursor.toArray()
+      res.send(result)
+    })
 
 
 
